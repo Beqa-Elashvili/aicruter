@@ -1,8 +1,8 @@
 import { MdOutlinePeopleAlt } from "react-icons/md";
 
-const Logo = () => {
+const Logo = ({ classname }: { classname?: string }) => {
   return (
-    <div className="bg-white flex items-center gap-1">
+    <div className={`${classname} flex items-center gap-1`}>
       <MdOutlinePeopleAlt size={40} />
       <p className="text-2xl font-bold ">
         <span className="text-cyan-500">AI</span>CRUITER
