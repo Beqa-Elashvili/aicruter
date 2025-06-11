@@ -2,10 +2,10 @@
 
 import { useContext, useEffect, useState } from "react";
 import { supabase } from "../services/suparbaseClient";
-import { UserDetailContext } from "./UserDetailContext";
+import { UserDetail, UserDetailContext } from "./UserDetailContext";
 
 function Provider({ children }: { children: any }) {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<UserDetail | null>(null);
   const CreateNewUser = () => {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       let { data: Users, error } = await supabase
