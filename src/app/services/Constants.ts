@@ -1,4 +1,4 @@
-import { LayoutDashboard } from "lucide-react";
+import { Code2Icon, LayoutDashboard, Puzzle, User2Icon } from "lucide-react";
 
 export const SideBarOptions = [
   {
@@ -25,5 +25,28 @@ export const SideBarOptions = [
     name: "Settings",
     icon: LayoutDashboard,
     path: "/settings",
+  },
+];
+
+export const InterviewType = [
+  {
+    title: "Technical",
+    icon: Code2Icon,
+  },
+  {
+    name: "Behavioral",
+    icon: User2Icon,
+  },
+  {
+    name: "Experience",
+    icon: Puzzle,
+  },
+  {
+    name: "Problem Solving",
+    icon: LayoutDashboard,
+  },
+  {
+    name: "Leadership",
+    icon: LayoutDashboard,
   },
 ];
