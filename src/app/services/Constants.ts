@@ -1,4 +1,11 @@
-import { Code2Icon, LayoutDashboard, Puzzle, User2Icon } from "lucide-react";
+import {
+  Code2Icon,
+  LayoutDashboard,
+  Puzzle,
+  User2Icon,
+  Rocket,
+  BriefcaseBusiness,
+} from "lucide-react";
 
 export const SideBarOptions = [
   {
@@ -34,19 +41,19 @@ export const InterviewType = [
     icon: Code2Icon,
   },
   {
-    name: "Behavioral",
+    title: "Behavioral",
     icon: User2Icon,
   },
   {
-    name: "Experience",
+    title: "Experience",
+    icon: BriefcaseBusiness,
+  },
+  {
+    title: "Problem Solving",
     icon: Puzzle,
   },
   {
-    name: "Problem Solving",
-    icon: LayoutDashboard,
-  },
-  {
-    name: "Leadership",
-    icon: LayoutDashboard,
+    title: "Leadership",
+    icon: Rocket,
   },
 ];

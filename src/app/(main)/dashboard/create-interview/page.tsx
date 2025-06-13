@@ -9,6 +9,18 @@ import FormContainer from "./_components/FormContainer";
 function CreateInterview() {
   const router = useRouter();
   const [step, setStep] = useState<number>(1);
+  const [formData, setFormData] = useState<{
+    [key: string]: string | string[];
+  }>({});
+
+  const onHandleInputChange = (field: string, value: string | string[]) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  console.log(formData)
   return (
     <div className="mt-10 px-10 md:px-24 lg:px-44 xl:px-56">
       <div className="flex gap-5 items-center">
@@ -16,7 +28,7 @@ function CreateInterview() {
         <h2 className="font-bold text-2xl">Create New Interview</h2>
       </div>
       <Progress value={step * 33.33} className="my-5" />
-      <FormContainer />
+      <FormContainer onHandleInputChange={onHandleInputChange} />
     </div>
   );
 }
