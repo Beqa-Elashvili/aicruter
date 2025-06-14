@@ -16,8 +16,10 @@ import { ArrowRight } from "lucide-react";
 
 function FormContainer({
   onHandleInputChange,
+  GoToNext,
 }: {
   onHandleInputChange: (field: string, value: string | string[]) => void;
+  GoToNext: () => void;
 }) {
   const [interviewType, setIntetviewType] = useState<string[]>([]);
 
@@ -42,7 +44,7 @@ function FormContainer({
       <div className="mt-5">
         <h2 className="text-sm font-medium">Job Position</h2>
         <Input
-          onChange={(e) => onHandleInputChange("jobPosition ", e.target.value)}
+          onChange={(e) => onHandleInputChange("jobPosition", e.target.value)}
           placeholder="e.g. Full Stack Developer"
           className="mt-2"
         />
@@ -51,7 +53,7 @@ function FormContainer({
         <h2 className="text-sm font-medium">Job Description</h2>
         <Textarea
           onChange={(e) =>
-            onHandleInputChange("jobDescription ", e.target.value)
+            onHandleInputChange("jobDescription", e.target.value)
           }
           placeholder="Enter details job description"
           className="h-[200px] mt-2"
@@ -60,7 +62,7 @@ function FormContainer({
       <div className="mt-5">
         <h2 className="text-sm font-medium">Interview Duration</h2>
         <Select
-          onValueChange={(value) => onHandleInputChange("duration ", value)}
+          onValueChange={(value) => onHandleInputChange("duration", value)}
         >
           <SelectTrigger className="w-full mt-2">
             <SelectValue placeholder="Select Duration" />
@@ -93,7 +95,7 @@ function FormContainer({
         </div>
       </div>
       <div className="mt-7 flex justify-end">
-        <Button className="bg-blue-600">
+        <Button className="bg-blue-600" onClick={() => GoToNext()}>
           Generate Question <ArrowRight />
         </Button>
       </div>

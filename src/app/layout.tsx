@@ -12,6 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 import Provider from "./providers/provider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "ai-recruiter app",
@@ -28,7 +29,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Provider>{children}</Provider>
+        <Provider>
+          {children}
+          <Toaster />
+        </Provider>
       </body>
     </html>
   );
