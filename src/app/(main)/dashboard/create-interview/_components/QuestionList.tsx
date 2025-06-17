@@ -10,7 +10,13 @@ import { supabase } from "@/app/services/suparbaseClient";
 import { useUser } from "@/app/providers/provider";
 import { v4 as uuidv4 } from "uuid";
 
-function QuestionList({ formData }: { formData: any }) {
+function QuestionList({
+  formData,
+  onCreateLink,
+}: {
+  formData: any;
+  onCreateLink: (interview_id: string) => void;
+}) {
   const [questionsList, setQuestionList] = useState([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [load, setLoad] = useState<boolean>(false);
@@ -46,6 +52,7 @@ function QuestionList({ formData }: { formData: any }) {
   const onFinish = async () => {
     try {
       setLoad(true);
+      const interview_id = uuidv4();
       const { data, error } = await supabase
         .from("Interviews")
         .insert([
@@ -53,11 +60,12 @@ function QuestionList({ formData }: { formData: any }) {
             ...formData,
             questionList: questionsList,
             userEmail: user?.email,
-            interview_id: uuidv4(),
+            interview_id: interview_id,
           },
         ])
         .select();
       console.log(data);
+      onCreateLink(interview_id);
     } catch (error) {
       throw new Error("Server Error");
     } finally {
@@ -86,9 +94,13 @@ function QuestionList({ formData }: { formData: any }) {
         </div>
       )}
       <div className="flex justify-end mt-10">
-        <Button className="bg-blue-600" onClick={() => onFinish()}>
+        <Button
+          disabled={load}
+          className="bg-blue-600"
+          onClick={() => onFinish()}
+        >
           {load && <Loader2 className="animate-spin" />}
-          Finish
+          Create Interview Link & Finish
         </Button>
       </div>
     </div>
