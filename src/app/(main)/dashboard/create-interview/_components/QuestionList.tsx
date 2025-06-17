@@ -3,12 +3,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
-import { Loader2Icon } from "lucide-react";
+import { Loader2, Loader2Icon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import QuestionListContainer from "./QuestionListContainer";
+import { supabase } from "@/app/services/suparbaseClient";
+import { useUser } from "@/app/providers/provider";
+import { v4 as uuidv4 } from "uuid";
 
 function QuestionList({ formData }: { formData: any }) {
   const [questionsList, setQuestionList] = useState([]);
   const [loading, setLoading] = useState<boolean>(true);
-
+  const [load, setLoad] = useState<boolean>(false);
+  const { user } = useUser();
   useEffect(() => {
     if (formData) {
       generateQuestionList();
@@ -37,6 +43,28 @@ function QuestionList({ formData }: { formData: any }) {
     }
   };
 
+  const onFinish = async () => {
+    try {
+      setLoad(true);
+      const { data, error } = await supabase
+        .from("Interviews")
+        .insert([
+          {
+            ...formData,
+            questionList: questionsList,
+            userEmail: user?.email,
+            interview_id: uuidv4(),
+          },
+        ])
+        .select();
+      console.log(data);
+    } catch (error) {
+      throw new Error("Server Error");
+    } finally {
+      setLoad(false);
+    }
+  };
+
   return (
     <div>
       {loading && (
@@ -53,18 +81,16 @@ function QuestionList({ formData }: { formData: any }) {
       )}
 
       {questionsList.length > 0 && (
-        <div className="p-5 border border-gray-300 rounded-xl bg-blue-50">
-          {questionsList.map((item: any, index: number) => (
-            <div
-              key={index}
-              className="p-3 border border-blue-500 shadow-inner shadow-blue-100 mb-2 rounded-xl"
-            >
-              <h2 className="font-medium">{item?.question}</h2>
-              <p className="text-sm text-gray-600">Type: {item?.type}</p>
-            </div>
-          ))}
+        <div>
+          <QuestionListContainer questionsList={questionsList} />
         </div>
       )}
+      <div className="flex justify-end mt-10">
+        <Button className="bg-blue-600" onClick={() => onFinish()}>
+          {load && <Loader2 className="animate-spin" />}
+          Finish
+        </Button>
+      </div>
     </div>
   );
 }
