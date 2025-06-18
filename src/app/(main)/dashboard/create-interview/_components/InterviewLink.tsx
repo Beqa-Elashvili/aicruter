@@ -51,13 +51,13 @@ function InterviewLink({
           </Button>
         </div>
         <hr className="my-7" />
-        <div className="flex items-center gap-5">
-          <h2>
-            <Clock className="w-4 h-4 text-sm text-gray-500" />
+        <div className="flex items-center gap-5 text-gray-500">
+          <h2 className="flex items-center gap-1 ">
+            <Clock className="w-4 h-4 text-sm" />
             {formData?.duration}
           </h2>
-          <h2 className="flex items-center gap-2 text-gray-500">
-            <List className="w-4 h-4 text-sm " />
+          <h2 className="flex items-center gap-2">
+            <List className="w-4 h-4 text-sm" />
             10 Questions
           </h2>
           {/* <h2>

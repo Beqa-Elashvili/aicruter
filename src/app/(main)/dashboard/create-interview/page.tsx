@@ -11,7 +11,7 @@ import InterviewLink from "./_components/InterviewLink";
 
 function CreateInterview() {
   const router = useRouter();
-  const [step, setStep] = useState<number>(3);
+  const [step, setStep] = useState<number>(1);
   const [interviewId, setInterviewId] = useState("");
   const [formData, setFormData] = useState<{
     [key: string]: string | string[];
