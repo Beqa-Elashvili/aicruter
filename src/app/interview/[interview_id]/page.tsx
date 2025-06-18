@@ -1,12 +1,13 @@
 "use client";
 
+import { useInterviewData } from "@/app/providers/InterviewProvider";
 import { supabase } from "@/app/services/suparbaseClient";
 import Logo from "@/components/logo/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Clock, Info, Video } from "lucide-react";
+import { Clock, Info, Loader2Icon, Video } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -22,6 +23,8 @@ function Interview() {
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const { interview_id } = useParams();
+  const { interviewInfo, setInterviewInfo } = useInterviewData();
+  const router = useRouter();
 
   useEffect(() => {
     interview_id && GetInterviewDetails();
@@ -37,6 +40,21 @@ function Interview() {
       if (Interviews) setInterviewData(Interviews[0]);
     } catch (error) {
       toast("Incorrect Interview Link");
+    } finally {
+      setLoading(false);
+    }
+  };
+  const onJoinInterview = async () => {
+    try {
+      setLoading(true);
+      let { data: Interviews, error } = await supabase
+        .from("Interviews")
+        .select("*")
+        .eq("interview_id", interview_id);
+      if (Interviews) setInterviewInfo(Interviews[0]);
+      router.push("/interview/" + interview_id + "/start");
+    } catch (error) {
+      console.error("Something went wrong", error);
     } finally {
       setLoading(false);
     }
@@ -87,9 +105,11 @@ function Interview() {
         </div>
         <Button
           disabled={loading || !userName}
+          onClick={() => onJoinInterview()}
           className={`mt-5 w-full font-bold bg-blue-600`}
         >
           <Video />
+          {loading && <Loader2Icon className="animate-spin" />}
           Join Interview
         </Button>
       </div>

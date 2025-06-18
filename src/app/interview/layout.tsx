@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import InterviewHeader from "./_components/InterviewHeader";
+import InterviewDataProvider from "../providers/InterviewProvider";
 
 function InterviewLayout({ children }: { children: any }) {
   return (
-    <div className="bg-secondary ">
-      <InterviewHeader />
-      {children}
-    </div>
+    <InterviewDataProvider>
+      <div className="bg-secondary ">
+        <InterviewHeader />
+        {children}
+      </div>
+    </InterviewDataProvider>
   );
 }
 
