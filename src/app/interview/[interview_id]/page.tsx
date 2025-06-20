@@ -51,7 +51,11 @@ function Interview() {
         .from("Interviews")
         .select("*")
         .eq("interview_id", interview_id);
-      if (Interviews) setInterviewInfo(Interviews[0]);
+      if (Interviews)
+        setInterviewInfo({
+          username: userName,
+          interviewData: Interviews[0],
+        });
       router.push("/interview/" + interview_id + "/start");
     } catch (error) {
       console.error("Something went wrong", error);
