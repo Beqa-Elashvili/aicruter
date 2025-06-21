@@ -2,14 +2,15 @@
 
 import { useInterviewData } from "@/app/providers/InterviewProvider";
 import { Timer, Bot, Mic, Phone } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Vapi from "@vapi-ai/web";
 import type { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
 import AlertComfirmation from "./_components/AlertComfirmation";
+import { toast } from "sonner";
 
 function StratInterview() {
   const { interviewInfo, setInterviewInfo } = useInterviewData();
-
+  const [activeUser, setActiveUser] = useState<boolean>(false);
   const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY!);
 
   const startCall = () => {
@@ -26,9 +27,9 @@ function StratInterview() {
         ", how are you? Ready for your interview on " +
         interviewInfo?.interviewData.jobPostition,
       transcriber: {
-        provider: "deepgram", // Only include model/language if Deepgram's type allows it
-        model: "nova-2", // ❗ Remove if the Deepgram type rejects it
-        language: "en-US", // ❗ Remove if incompatible
+        provider: "deepgram",
+        model: "nova-2",
+        language: "en-US",
       },
       voice: {
         provider: "playht",
@@ -87,27 +88,53 @@ Key Guidelines:
   const stopInterview = () => {
     vapi.stop();
   };
+  vapi.on("speech-start", () => {
+    console.log("Assistant speech has started."), setActiveUser(false);
+  });
+  vapi.on("speech-end", () => {
+    console.log("Assistant speech has ended.");
+    setActiveUser(true);
+  });
+
+  vapi.on("call-start", () => {
+    console.log("Call started"), toast("Call Connected...");
+  });
+
+  vapi.on("call-end", () => {
+    console.log("Call ended");
+    toast("Interview Ended!");
+  });
 
   return (
     <div className="p-20 lg:px-48 xl:px-56">
       <h2 className="font-bold text-xl flex justify-between">
         AI Interview Session
-        <span className="flex gap-2 items-center">
+        <span className="flex gap-2 items-center ">
           <Timer />
           00:00:00
         </span>
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
         <div className="bg-white p-40 rounded-lg border flex-col gap-3  border-cyan-200 flex items-center justify-center mt-5">
-          <div className="bg-slate-500 p-1 rounded-full flex items-center justify-center">
-            <Bot className="w-[50px] h-[50px] text-cyan-400" />
+          <div className="relative">
+            {!activeUser && (
+              <span className="absolute inset-0 rounded-full bg-blue-500 animate-ping"></span>
+            )}
+            <div className="bg-slate-500 p-1 rounded-full flex items-center justify-center">
+              <Bot className="w-[50px] h-[50px] text-cyan-400" />
+            </div>
           </div>
           <h2>AI RecruIter</h2>
         </div>
         <div className="bg-white p-40 rounded-lg   flex-col gap-3 border border-cyan-200 flex items-center justify-center mt-5">
-          <h2 className="text-xl bg-blue-600 text-white rounded-full p-3 px-5">
-            {interviewInfo?.username[0]}
-          </h2>
+          <div className="relative">
+            {!activeUser && (
+              <span className="absolute inset-0 rounded-full bg-blue-500 animate-ping"></span>
+            )}
+            <h2 className="text-xl bg-blue-600 text-white rounded-full p-3 px-5">
+              {interviewInfo?.username[0]}
+            </h2>
+          </div>
           <h2>{interviewInfo?.username}</h2>
         </div>
       </div>
