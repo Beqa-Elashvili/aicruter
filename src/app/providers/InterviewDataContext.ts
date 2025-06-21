@@ -3,7 +3,7 @@ import { createContext } from "react";
 export interface TInterviewInfoType {
   username: string;
   interviewData: {
-    jobPostition: string;
+    jobPosition: string;
     questionList: [
       {
         question: string[];
@@ -23,7 +23,7 @@ export const InterviewDataContext = createContext<InterviewDataContextType>({
   interviewInfo: {
     username: "",
     interviewData: {
-      jobPostition: "",
+      jobPosition: "",
       questionList: [
         {
           question: [],

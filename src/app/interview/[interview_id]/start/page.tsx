@@ -18,6 +18,7 @@ function StratInterview() {
     interviewInfo?.interviewData.questionList.forEach(
       (item, index) => (questionList = item?.question + "," + questionList)
     );
+    console.log(interviewInfo);
 
     const assistantOptions: CreateAssistantDTO = {
       name: "AI Recruiter",
@@ -25,7 +26,7 @@ function StratInterview() {
         "Hi " +
         interviewInfo?.username +
         ", how are you? Ready for your interview on " +
-        interviewInfo?.interviewData.jobPostition,
+        interviewInfo?.interviewData.jobPosition,
       transcriber: {
         provider: "deepgram",
         model: "nova-2",
@@ -45,7 +46,7 @@ function StratInterview() {
 You are an AI voice assistant conducting interviews.
 Your job is to ask candidates provided interview questions and assess their responses.
 Begin the conversation with a friendly introduction, setting a relaxed yet professional tone. Example:
-"Hey there! Welcome to your ${interviewInfo?.interviewData.jobPostition} interview. Let's get started with a few questions!"
+"Hey there! Welcome to your ${interviewInfo?.interviewData.jobPosition} interview. Let's get started with a few questions!"
 
 Ask one question at a time and wait for the candidate's response before proceeding. Keep the questions clear and concise.
 
@@ -91,15 +92,13 @@ Key Guidelines:
   vapi.on("speech-start", () => {
     console.log("Assistant speech has started."), setActiveUser(false);
   });
+  vapi.on("call-start", () => {
+    console.log("Call started"), toast("Call Connected...");
+  });
   vapi.on("speech-end", () => {
     console.log("Assistant speech has ended.");
     setActiveUser(true);
   });
-
-  vapi.on("call-start", () => {
-    console.log("Call started"), toast("Call Connected...");
-  });
-
   vapi.on("call-end", () => {
     console.log("Call ended");
     toast("Interview Ended!");
