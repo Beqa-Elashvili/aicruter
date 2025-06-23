@@ -7,10 +7,12 @@ import Vapi from "@vapi-ai/web";
 import type { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
 import AlertComfirmation from "./_components/AlertComfirmation";
 import { toast } from "sonner";
+import axios from "axios";
 
 function StratInterview() {
-  const { interviewInfo, setInterviewInfo } = useInterviewData();
+  const { interviewInfo } = useInterviewData();
   const [activeUser, setActiveUser] = useState<boolean>(false);
+  const [conversation, setConversation] = useState();
   const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY!);
 
   const startCall = () => {
@@ -24,7 +26,7 @@ function StratInterview() {
       name: "AI Recruiter",
       firstMessage:
         "Hi " +
-        interviewInfo?.username +
+        interviewInfo?.userName +
         ", how are you? Ready for your interview on " +
         interviewInfo?.interviewData.jobPosition,
       transcriber: {
@@ -102,7 +104,22 @@ Key Guidelines:
   vapi.on("call-end", () => {
     console.log("Call ended");
     toast("Interview Ended!");
+    GetFeedBack();
   });
+
+  vapi.on("message", (message) => {
+    console.log(message?.conversation);
+    setConversation(message?.conversation);
+  });
+
+  const GetFeedBack = async () => {
+    const result = await axios.post("/api/ai-feedback", {
+      conversation: conversation,
+    });
+    const Content = result.data.content;
+    const FINAL_CONTENT = Content.replace("```json", "").replace("```", "");
+    console.log(FINAL_CONTENT);
+  };
 
   return (
     <div className="p-20 lg:px-48 xl:px-56">
@@ -123,7 +140,7 @@ Key Guidelines:
               <Bot className="w-[50px] h-[50px] text-cyan-400" />
             </div>
           </div>
-          <h2>AI RecruIter</h2>
+          <h2 className="w-40 text-center">AI RecruIter</h2>
         </div>
         <div className="bg-white p-40 rounded-lg   flex-col gap-3 border border-cyan-200 flex items-center justify-center mt-5">
           <div className="relative">
@@ -131,10 +148,10 @@ Key Guidelines:
               <span className="absolute inset-0 rounded-full bg-blue-500 animate-ping"></span>
             )}
             <h2 className="text-xl bg-blue-600 text-white rounded-full p-3 px-5">
-              {interviewInfo?.username[0]}
+              {interviewInfo?.userName[0]}
             </h2>
           </div>
-          <h2>{interviewInfo?.username}</h2>
+          <h2>{interviewInfo?.userName}</h2>
         </div>
       </div>
       <div className="flex items-center gap-5 justify-center mt-7">

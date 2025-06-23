@@ -1,7 +1,8 @@
 import { createContext } from "react";
 
 export interface TInterviewInfoType {
-  username: string;
+  userName: string;
+  userEmail: string;
   interviewData: {
     jobPosition: string;
     questionList: [
@@ -21,7 +22,8 @@ export interface InterviewDataContextType {
 
 export const InterviewDataContext = createContext<InterviewDataContextType>({
   interviewInfo: {
-    username: "",
+    userName: "",
+    userEmail: "",
     interviewData: {
       jobPosition: "",
       questionList: [

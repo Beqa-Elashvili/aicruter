@@ -22,6 +22,7 @@ function Interview() {
   const [interviewData, setInterviewData] = useState<InterviewType>();
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [userEmail, setUserEmail] = useState("");
   const { interview_id } = useParams();
   const { interviewInfo, setInterviewInfo } = useInterviewData();
   const router = useRouter();
@@ -53,7 +54,8 @@ function Interview() {
         .eq("interview_id", interview_id);
       if (Interviews)
         setInterviewInfo({
-          username: userName,
+          userName: userName,
+          userEmail: userEmail,
           interviewData: Interviews[0],
         });
       router.push("/interview/" + interview_id + "/start");
@@ -88,6 +90,13 @@ function Interview() {
           <Input
             placeholder="e.g. John Smith"
             onChange={(e) => setUserName(e.target.value)}
+          />
+        </div>
+        <div className="w-full mt-5">
+          <h2>Enter your Email</h2>
+          <Input
+            placeholder="e.g. John@gmail.com"
+            onChange={(e) => setUserEmail(e.target.value)}
           />
         </div>
         <div className="p-3 bg-blue-100 flex mt-6  gap-4 rounded-xl">

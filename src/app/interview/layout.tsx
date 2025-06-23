@@ -5,7 +5,7 @@ import InterviewDataProvider from "../providers/InterviewProvider";
 function InterviewLayout({ children }: { children: any }) {
   return (
     <InterviewDataProvider>
-      <div className="bg-secondary ">
+      <div className="bg-secondary min-h-screen h-full">
         <InterviewHeader />
         {children}
       </div>
