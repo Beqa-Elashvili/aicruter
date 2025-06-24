@@ -1,26 +1,15 @@
 "use client";
+import React from "react";
 
 import { useUser } from "@/app/providers/provider";
 import { supabase } from "@/app/services/suparbaseClient";
 import { Button } from "@/components/ui/button";
 import { Video } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import InterviewCard from "./InterviewCard";
+import { useEffect, useState } from "react";
+import InterviewCard from "../dashboard/_components/InterviewCard";
+import { Tinterview } from "../dashboard/_components/LatestInterviewsList";
 
-export type Tinterview = {
-  id: number;
-  created_at: string;
-  duration: string;
-  interview_id: string;
-  jobDescription: string;
-  jobPosition: string;
-  ["interview-feedback"]?: { userEmail: string }[];
-  questionList: { question: string; type: string }[];
-  type: string[];
-  userEmail: string;
-};
-
-function LatestInterviewsList() {
+export default function AllInterview() {
   const [interviewList, setInterviewList] = useState<Tinterview[]>([]);
   const { user } = useUser();
 
@@ -42,7 +31,7 @@ function LatestInterviewsList() {
 
   return (
     <div className="my-5">
-      <h2 className="font-bold text-2xl">Previously Created Interviews </h2>
+      <h2 className="font-bold text-2xl">All Previously Created Interviews </h2>
 
       {interviewList?.length === 0 ? (
         <div className="p-5 flex flex-col gap-3 items-center mt-5 rounded-lg bg-white">
@@ -60,5 +49,3 @@ function LatestInterviewsList() {
     </div>
   );
 }
-
-export default LatestInterviewsList;

@@ -19,9 +19,9 @@ export const SideBarOptions = [
     path: "/scheduled-interview",
   },
   {
-    name: "All Interiew",
+    name: "All Interview",
     icon: LayoutDashboard,
-    path: "/all-interiew",
+    path: "/all-interview",
   },
   {
     name: "Billing",
