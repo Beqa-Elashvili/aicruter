@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useInterviewData } from "@/app/providers/InterviewProvider";
-import { Timer, Bot, Mic, Phone } from "lucide-react";
+import { Timer, Bot, Mic, Phone, Loader2Icon } from "lucide-react";
 import Vapi from "@vapi-ai/web";
 import type { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
 import AlertComfirmation from "./_components/AlertComfirmation";
@@ -120,6 +120,7 @@ Keep it friendly, short, and React-focused.
 
   console.log(" this is conversation", conversationRef.current);
 
+  const [loading, setLoading] = useState<boolean>(false);
   const generateFeedback = async () => {
     if (!conversationRef.current) {
       console.warn("No conversation available.");
@@ -127,6 +128,7 @@ Keep it friendly, short, and React-focused.
     }
 
     try {
+      setLoading(true);
       const result = await axios.post("/api/ai-feedback", {
         conversation: conversationRef.current,
       });
@@ -153,9 +155,12 @@ Keep it friendly, short, and React-focused.
 
       toast.success("Feedback saved!");
       router.replace(`/interview/${interview_id}/completed`);
+      setLoading(false);
     } catch (error) {
       console.error("Feedback error:", error);
       toast.error("Something went wrong while generating feedback.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -163,14 +168,13 @@ Keep it friendly, short, and React-focused.
     <div className="p-20 lg:px-48 xl:px-56">
       <h2 className="font-bold text-xl flex justify-between">
         AI Interview Session
-        <span className="flex gap-2 items-center">
+        <span className="flex gap-2 items-center ">
           <Timer />
           00:00:00
         </span>
       </h2>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-        <div className="bg-white p-40 rounded-lg border flex-col gap-3 border-cyan-200 flex items-center justify-center mt-5">
+        <div className="bg-white p-40 rounded-lg border flex-col gap-3  border-cyan-200 flex items-center justify-center mt-5">
           <div className="relative">
             {!activeUser && (
               <span className="absolute inset-0 rounded-full bg-blue-500 animate-ping"></span>
@@ -179,26 +183,28 @@ Keep it friendly, short, and React-focused.
               <Bot className="w-[50px] h-[50px] text-cyan-400" />
             </div>
           </div>
-          <h2 className="w-40 text-center">AI Recruiter</h2>
+          <h2 className="w-40 text-center">AI RecruIter</h2>
         </div>
-
-        <div className="bg-white p-40 rounded-lg flex-col gap-3 border border-cyan-200 flex items-center justify-center mt-5">
+        <div className="bg-white p-40 rounded-lg   flex-col gap-3 border border-cyan-200 flex items-center justify-center mt-5">
           <div className="relative">
             {activeUser && (
               <span className="absolute inset-0 rounded-full bg-blue-500 animate-ping"></span>
             )}
             <h2 className="text-xl bg-blue-600 text-white rounded-full p-3 px-5">
-              {interviewInfo?.userName?.charAt(0) || "U"}
+              {interviewInfo?.userName[0]}
             </h2>
           </div>
           <h2>{interviewInfo?.userName}</h2>
         </div>
       </div>
-
       <div className="flex items-center gap-5 justify-center mt-7">
         <Mic className="h-10 w-10 p-3 bg-gray-500 text-white rounded-full cursor-pointer" />
         <AlertComfirmation stopInterview={() => stopInterview()}>
-          <Phone className="h-10 w-10 p-3 text-white bg-red-500 rounded-full cursor-pointer" />
+          {!loading ? (
+            <Phone className="h-10 w-10 p-3 text-white bg-red-500 rounded-full cursor-pointer" />
+          ) : (
+            <Loader2Icon className="animate-spin" />
+          )}
         </AlertComfirmation>
       </div>
 
