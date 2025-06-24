@@ -1,9 +1,10 @@
 import React from "react";
-import { Tinterview } from "./LatestInterviewsList";
+import { Tinterview } from "@/app/types/types";
 import moment from "moment";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Copy, Send } from "lucide-react";
 import { toast } from "sonner";
+import Link from "next/link";
 
 function InterviewCard({
   interview,
@@ -13,8 +14,7 @@ function InterviewCard({
   viewDetail?: boolean;
 }) {
   const copyLink = () => {
-    const url =
-      process.env.NEXT_PUBLIC_HOST_URL + "/" + interview?.interview_id;
+    const url = `${process.env.NEXT_PUBLIC_HOST_URL} / ${interview?.interview_id}`;
     navigator.clipboard.writeText(url);
     toast("Copied!");
   };
@@ -47,9 +47,11 @@ function InterviewCard({
           </Button>
         </div>
       ) : (
-        <Button className="mt-5 w-full" variant={"outline"}>
-          View Details <ArrowRight />
-        </Button>
+        <Link href={`/scheduled-interview/${interview.interview_id}/details`}>
+          <Button className="mt-5 w-full" variant={"outline"}>
+            View Details <ArrowRight />
+          </Button>
+        </Link>
       )}
     </div>
   );

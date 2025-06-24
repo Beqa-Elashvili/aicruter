@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Video } from "lucide-react";
 import { useEffect, useState } from "react";
 import InterviewCard from "../dashboard/_components/InterviewCard";
-import { Tinterview } from "../dashboard/_components/LatestInterviewsList";
+import { Tinterview } from "@/app/types/types";
 
 export default function AllInterview() {
   const [interviewList, setInterviewList] = useState<Tinterview[]>([]);

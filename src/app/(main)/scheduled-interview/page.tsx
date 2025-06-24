@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Video } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import InterviewCard from "../dashboard/_components/InterviewCard";
-import { Tinterview } from "../dashboard/_components/LatestInterviewsList";
+import { Tinterview } from "@/app/types/types";
 
 function ScheduledInterview() {
   const { user } = useUser();

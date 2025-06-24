@@ -6,20 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Video } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import InterviewCard from "./InterviewCard";
-
-export type Tinterview = {
-  id: number;
-  created_at: string;
-  duration: string;
-  interview_id: string;
-  jobDescription: string;
-  jobPosition: string;
-  ["interview-feedback"]?: { userEmail: string }[];
-  questionList: { question: string; type: string }[];
-  type: string[];
-  userEmail: string;
-};
-
+import { Tinterview } from "@/app/types/types";
 function LatestInterviewsList() {
   const [interviewList, setInterviewList] = useState<Tinterview[]>([]);
   const { user } = useUser();
