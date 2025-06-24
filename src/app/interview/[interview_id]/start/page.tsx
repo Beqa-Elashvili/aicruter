@@ -1,34 +1,34 @@
 "use client";
 
+import React, { useEffect, useRef, useState } from "react";
 import { useInterviewData } from "@/app/providers/InterviewProvider";
 import { Timer, Bot, Mic, Phone } from "lucide-react";
-import React, { useEffect, useState } from "react";
 import Vapi from "@vapi-ai/web";
 import type { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
 import AlertComfirmation from "./_components/AlertComfirmation";
 import { toast } from "sonner";
 import axios from "axios";
+import { supabase } from "@/app/services/suparbaseClient";
+import { useParams, useRouter } from "next/navigation";
 
 function StratInterview() {
   const { interviewInfo } = useInterviewData();
   const [activeUser, setActiveUser] = useState<boolean>(false);
-  const [conversation, setConversation] = useState();
-  const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY!);
+  const [conversation, setConversation] = useState<any[] | undefined>();
+  const conversationRef = useRef<any[] | undefined>(undefined);
+  const vapiRef = useRef<Vapi | null>(null);
+  const router = useRouter();
+  const { interview_id } = useParams();
 
   const startCall = () => {
-    let questionList: any;
-    interviewInfo?.interviewData.questionList.forEach(
-      (item, index) => (questionList = item?.question + "," + questionList)
-    );
-    console.log(interviewInfo);
+    const questionList = interviewInfo?.interviewData.questionList
+      .map((item: any) => item?.question)
+      .filter(Boolean)
+      .join(", ");
 
     const assistantOptions: CreateAssistantDTO = {
       name: "AI Recruiter",
-      firstMessage:
-        "Hi " +
-        interviewInfo?.userName +
-        ", how are you? Ready for your interview on " +
-        interviewInfo?.interviewData.jobPosition,
+      firstMessage: `Hi ${interviewInfo?.userName}, how are you? Ready for your interview on ${interviewInfo?.interviewData.jobPosition}?`,
       transcriber: {
         provider: "deepgram",
         model: "nova-2",
@@ -47,91 +47,130 @@ function StratInterview() {
             content: `
 You are an AI voice assistant conducting interviews.
 Your job is to ask candidates provided interview questions and assess their responses.
-Begin the conversation with a friendly introduction, setting a relaxed yet professional tone. Example:
-"Hey there! Welcome to your ${interviewInfo?.interviewData.jobPosition} interview. Let's get started with a few questions!"
+Begin the conversation with a friendly introduction, setting a relaxed yet professional tone.
 
 Ask one question at a time and wait for the candidate's response before proceeding. Keep the questions clear and concise.
 
-Below are the questions to ask one by one:
 Questions: ${questionList}
 
-If the candidate struggles, offer hints or rephrase the question without giving away the answer. Example:
-"Need a hint? Think about how React tracks component updates!"
+If the candidate struggles, offer hints or rephrase the question.
 
-Provide brief, encouraging feedback after each answer. Example:
-"Nice! That's a solid answer."
-"Hmm, not quite! Want to try again?"
+Provide brief, encouraging feedback after each answer.
 
-Keep the conversation natural and engaging—use casual phrases like "Alright, next up..." or "Let's tackle a tricky one!"
+After 5–7 questions, summarize their performance and end on a positive note.
 
-After 5-7 questions, wrap up the interview smoothly by summarizing their performance. Example:
-"That was great! You handled some tough questions well. Keep sharpening your skills!"
-
-End on a positive note:
-"Thanks for chatting! Hope to see you crushing projects soon!"
-
-Key Guidelines:
-- Be friendly, engaging, and witty
-- Keep responses short and natural, like a real conversation
-- Adapt based on the candidate's confidence level
-- Ensure the interview remains focused on React
+Keep it friendly, short, and React-focused.
 `.trim(),
           },
         ],
       },
     };
 
-    vapi.start(assistantOptions);
+    vapiRef.current?.start(assistantOptions);
   };
 
   useEffect(() => {
-    interviewInfo && startCall();
+    if (!vapiRef.current) {
+      vapiRef.current = new Vapi(process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY!);
+
+      vapiRef.current.on("call-start", () => {
+        console.log("Call started");
+        toast("Call Connected...");
+      });
+
+      vapiRef.current.on("speech-start", () => {
+        console.log("Assistant speech has started.");
+        setActiveUser(false);
+      });
+
+      vapiRef.current.on("speech-end", () => {
+        console.log("Assistant speech has ended.");
+        setActiveUser(true);
+      });
+
+      vapiRef.current.on("call-end", () => {
+        console.log("Call ended");
+        toast("Interview Ended!");
+        generateFeedback();
+      });
+
+      vapiRef.current.on("message", (message) => {
+        console.log("Message received:", message);
+
+        if (message?.conversation) {
+          conversationRef.current = message.conversation;
+          setConversation(message.conversation);
+        } else {
+          console.warn(
+            "No conversation in message — keeping previous conversation."
+          );
+        }
+      });
+    }
+    console.log("this is conversation ---->>>", conversation);
+
+    if (interviewInfo) {
+      startCall();
+    }
   }, [interviewInfo]);
 
   const stopInterview = () => {
-    vapi.stop();
+    vapiRef.current?.stop();
   };
-  vapi.on("speech-start", () => {
-    console.log("Assistant speech has started."), setActiveUser(false);
-  });
-  vapi.on("call-start", () => {
-    console.log("Call started"), toast("Call Connected...");
-  });
-  vapi.on("speech-end", () => {
-    console.log("Assistant speech has ended.");
-    setActiveUser(true);
-  });
-  vapi.on("call-end", () => {
-    console.log("Call ended");
-    toast("Interview Ended!");
-    GetFeedBack();
-  });
 
-  vapi.on("message", (message) => {
-    console.log(message?.conversation);
-    setConversation(message?.conversation);
-  });
+  console.log(" this is conversation", conversationRef.current);
 
-  const GetFeedBack = async () => {
-    const result = await axios.post("/api/ai-feedback", {
-      conversation: conversation,
-    });
-    const Content = result.data.content;
-    const FINAL_CONTENT = Content.replace("```json", "").replace("```", "");
-    console.log(FINAL_CONTENT);
+  const generateFeedback = async () => {
+    if (!conversationRef.current) {
+      console.warn("No conversation available.");
+      return;
+    }
+
+    try {
+      const result = await axios.post("/api/ai-feedback", {
+        conversation: conversationRef.current,
+      });
+
+      const content = result.data.content;
+      const cleaned = content.replace("```json", "").replace("```", "");
+      const feedbackJson = JSON.parse(cleaned);
+
+      const { data, error } = await supabase.from("interview-feedback").insert([
+        {
+          userName: interviewInfo?.userName,
+          userEmail: interviewInfo?.userEmail,
+          interview_id: interview_id,
+          feedback: feedbackJson,
+          recommended: false,
+        },
+      ]);
+
+      if (error) {
+        console.error("Supabase error:", error.message);
+        toast.error("Failed to store feedback.");
+        return;
+      }
+
+      toast.success("Feedback saved!");
+      router.replace(`/interview/${interview_id}/completed`);
+    } catch (error) {
+      console.error("Feedback error:", error);
+      toast.error("Something went wrong while generating feedback.");
+    }
   };
 
   return (
     <div className="p-20 lg:px-48 xl:px-56">
       <h2 className="font-bold text-xl flex justify-between">
         AI Interview Session
-        <span className="flex gap-2 items-center ">
+        <span className="flex gap-2 items-center">
           <Timer />
           00:00:00
         </span>
       </h2>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-        <div className="bg-white p-40 rounded-lg border flex-col gap-3  border-cyan-200 flex items-center justify-center mt-5">
+        <div className="bg-white p-40 rounded-lg border flex-col gap-3 border-cyan-200 flex items-center justify-center mt-5">
           <div className="relative">
             {!activeUser && (
               <span className="absolute inset-0 rounded-full bg-blue-500 animate-ping"></span>
@@ -140,26 +179,29 @@ Key Guidelines:
               <Bot className="w-[50px] h-[50px] text-cyan-400" />
             </div>
           </div>
-          <h2 className="w-40 text-center">AI RecruIter</h2>
+          <h2 className="w-40 text-center">AI Recruiter</h2>
         </div>
-        <div className="bg-white p-40 rounded-lg   flex-col gap-3 border border-cyan-200 flex items-center justify-center mt-5">
+
+        <div className="bg-white p-40 rounded-lg flex-col gap-3 border border-cyan-200 flex items-center justify-center mt-5">
           <div className="relative">
-            {!activeUser && (
+            {activeUser && (
               <span className="absolute inset-0 rounded-full bg-blue-500 animate-ping"></span>
             )}
             <h2 className="text-xl bg-blue-600 text-white rounded-full p-3 px-5">
-              {interviewInfo?.userName[0]}
+              {interviewInfo?.userName?.charAt(0) || "U"}
             </h2>
           </div>
           <h2>{interviewInfo?.userName}</h2>
         </div>
       </div>
+
       <div className="flex items-center gap-5 justify-center mt-7">
-        <Mic className="h-10 w-10 p-3 bg-gray-500 text-white  rounded-full cursor-pointer" />
+        <Mic className="h-10 w-10 p-3 bg-gray-500 text-white rounded-full cursor-pointer" />
         <AlertComfirmation stopInterview={() => stopInterview()}>
-          <Phone className="h-10 w-10 p-3 text-white bg-red-500  rounded-full cursor-pointer" />
+          <Phone className="h-10 w-10 p-3 text-white bg-red-500 rounded-full cursor-pointer" />
         </AlertComfirmation>
       </div>
+
       <h2 className="text-sm text-gray-400 text-center mt-5">
         Interview is in Progress...
       </h2>
