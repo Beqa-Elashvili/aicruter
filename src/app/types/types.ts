@@ -5,7 +5,7 @@ export type Tinterview = {
   interview_id: string;
   jobDescription: string;
   jobPosition: string;
-  ["interview-feedback"]?: InterviewFeedback[];
+  interview_feedback?: InterviewFeedback[];
   questionList: InterviewQuestion[];
   type: string[];
   userEmail: string;
@@ -47,5 +47,5 @@ export type TinterviewDetails = {
   jobPosition: string;
   questionList: InterviewQuestion[];
   type: string;
-  "interview-feedback"?: InterviewFeedback[] | null;
+  interview_feedback?: InterviewFeedback[] | null;
 };

@@ -34,7 +34,7 @@ function InterviewCard({
       <h2 className="mt-2 flex justify-between text-gray-500">
         {interview.duration}
         <span className="text-green-700">
-          {interview["interview-feedback"]?.length ?? 0} Candidates
+          {interview.interview_feedback?.length ?? 0} Candidates
         </span>
       </h2>
       {!viewDetail ? (
