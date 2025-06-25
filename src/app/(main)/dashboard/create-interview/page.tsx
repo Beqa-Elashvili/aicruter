@@ -8,6 +8,7 @@ import FormContainer from "./_components/FormContainer";
 import QuestionList from "./_components/QuestionList";
 import { toast } from "sonner";
 import InterviewLink from "./_components/InterviewLink";
+import { useUser } from "@/app/providers/provider";
 
 function CreateInterview() {
   const router = useRouter();
@@ -16,6 +17,7 @@ function CreateInterview() {
   const [formData, setFormData] = useState<{
     [key: string]: string | string[];
   }>({});
+  const { user } = useUser();
 
   const onHandleInputChange = (field: string, value: string | string[]) => {
     setFormData((prev) => ({
@@ -25,6 +27,10 @@ function CreateInterview() {
   };
 
   const onGoToNext = () => {
+    if (user?.credits <= 0) {
+      toast("Please add credits");
+      return;
+    }
     if (
       !formData.jobDescription ||
       !formData.jobPosition ||

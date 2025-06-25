@@ -2,6 +2,7 @@ import { InterviewFeedback } from "@/app/types/types";
 import React from "react";
 import moment from "moment";
 import { Button } from "@/components/ui/button";
+import CandidateFeedbackDialog from "./CandidateFeedbackDialog";
 
 function CandidatesList({
   candidateList,
@@ -11,7 +12,7 @@ function CandidatesList({
   return (
     <div className="">
       <h2 className="font-bold my-5">Candidates {candidateList.length}</h2>
-      {candidateList.map((candidate, index) => (
+      {candidateList.map((candidate: InterviewFeedback, index) => (
         <div
           key={index}
           className="p-5 flex gap-3 items-center justify-between bg-white rounded-lg"
@@ -30,9 +31,7 @@ function CandidatesList({
           </div>
           <div className="flex gap-3 items-center">
             <h2 className="text-green-600">6/10</h2>
-            <Button variant={"outline"} className="text-blue-500">
-              View Report
-            </Button>
+            <CandidateFeedbackDialog candidate={candidate} />
           </div>
         </div>
       ))}
