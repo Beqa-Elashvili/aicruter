@@ -64,14 +64,6 @@ function QuestionList({
           },
         ])
         .select();
-      // Update User Credits
-
-      const userUpdate = await supabase
-        .from("users")
-        .update({ credits: Number(user?.credits) - 1 })
-        .eq("email", user?.email)
-        .select();
-      console.log("this is update --->>", userUpdate);
 
       onCreateLink(interview_id);
     } catch (error) {

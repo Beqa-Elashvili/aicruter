@@ -25,7 +25,6 @@ function LatestInterviewsList() {
     user && GetInterviewsList();
   }, [user]);
 
-  console.log(interviewList);
 
   return (
     <div className="my-5">
