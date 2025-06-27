@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { Loader2, Loader2Icon } from "lucide-react";
@@ -9,25 +9,23 @@ import QuestionListContainer from "./QuestionListContainer";
 import { supabase } from "@/app/services/suparbaseClient";
 import { useUser } from "@/app/providers/provider";
 import { v4 as uuidv4 } from "uuid";
+type TFormData = {
+  [key: string]: string | string[];
+};
 
 function QuestionList({
   formData,
   onCreateLink,
 }: {
-  formData: any;
+  formData: TFormData;
   onCreateLink: (interview_id: string) => void;
 }) {
   const [questionsList, setQuestionList] = useState([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [load, setLoad] = useState<boolean>(false);
   const { user } = useUser();
-  useEffect(() => {
-    if (formData) {
-      generateQuestionList();
-    }
-  }, [formData]);
 
-  const generateQuestionList = async () => {
+  const generateQuestionList = useCallback(async () => {
     try {
       setLoading(true);
       const result = await axios.post("/api/ai-model", {
@@ -41,19 +39,25 @@ function QuestionList({
       } else {
         throw new Error("Invalid response format");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error:", error);
       toast("Server Error. Please try again.");
     } finally {
       setLoading(false);
     }
-  };
+  }, [formData, setLoading, setQuestionList]);
+
+  useEffect(() => {
+    if (formData) {
+      generateQuestionList();
+    }
+  }, [formData, generateQuestionList]);
 
   const onFinish = async () => {
     try {
       setLoad(true);
       const interview_id = uuidv4();
-      const { data, error } = await supabase
+      const {} = await supabase
         .from("Interviews")
         .insert([
           {

@@ -3,12 +3,11 @@
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import FormContainer from "./_components/FormContainer";
 import QuestionList from "./_components/QuestionList";
 import { toast } from "sonner";
 import InterviewLink from "./_components/InterviewLink";
-import { useUser } from "@/app/providers/provider";
 
 function CreateInterview() {
   const router = useRouter();
@@ -17,14 +16,16 @@ function CreateInterview() {
   const [formData, setFormData] = useState<{
     [key: string]: string | string[];
   }>({});
-  const { user } = useUser();
 
-  const onHandleInputChange = (field: string, value: string | string[]) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
+  const onHandleInputChange = useCallback(
+    (field: string, value: string | string[]) => {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+    },
+    []
+  );
 
   const onGoToNext = () => {
     if (

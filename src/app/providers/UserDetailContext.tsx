@@ -4,7 +4,7 @@ export interface UserDetail {
   name: string;
   email: string;
   picture: string;
-  [key: string]: any;
+  [key: string]: string;
 }
 
 export interface UserDetailContextType {

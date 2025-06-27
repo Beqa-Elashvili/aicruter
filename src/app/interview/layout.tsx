@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import InterviewHeader from "./_components/InterviewHeader";
 import InterviewDataProvider from "../providers/InterviewProvider";
 

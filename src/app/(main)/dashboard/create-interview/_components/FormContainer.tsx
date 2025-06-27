@@ -37,7 +37,7 @@ function FormContainer({
     if (interviewType) {
       onHandleInputChange("type", interviewType);
     }
-  }, [interviewType]);
+  }, [interviewType, onHandleInputChange]);
 
   return (
     <div className="p-5 bg-white rounded-xl">

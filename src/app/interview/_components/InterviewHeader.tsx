@@ -1,5 +1,4 @@
 import Logo from "@/components/logo/logo";
-import Image from "next/image";
 import React from "react";
 
 function InterviewHeader() {

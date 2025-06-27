@@ -34,7 +34,7 @@ function Footer() {
         onClick={copyEmail}
         className="text-gray-500 text-sm flex items-center gap-1"
       >
-        @ beqaelashvili3@gmail.com. <span>let's Connect.</span>
+        @ beqaelashvili3@gmail.com. <span>let&apos;s Connect.</span>
       </h2>
     </div>
   );

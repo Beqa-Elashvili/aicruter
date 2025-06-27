@@ -9,7 +9,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import moment from "moment";
 import { Progress } from "@/components/ui/progress";
 
 function CandidateFeedbackDialog({

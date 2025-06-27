@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useInterviewData } from "@/app/providers/InterviewProvider";
 import { Timer, Bot, Mic, Phone, Loader2Icon } from "lucide-react";
 import Vapi from "@vapi-ai/web";
@@ -20,7 +20,7 @@ function StratInterview() {
   const router = useRouter();
   const { interview_id } = useParams();
 
-  const startCall = () => {
+  const startCall = useCallback(() => {
     const questionList = interviewInfo?.interviewData.questionList
       .map((item: any) => item?.question)
       .filter(Boolean)
@@ -67,7 +67,49 @@ Keep it friendly, short, and React-focused.
     };
 
     vapiRef.current?.start(assistantOptions);
-  };
+  }, [interviewInfo]);
+
+  const generateFeedback = useCallback(async () => {
+    if (!conversationRef.current) {
+      console.warn("No conversation available.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const result = await axios.post("/api/ai-feedback", {
+        conversation: conversationRef.current,
+      });
+
+      const content = result.data.content;
+      const cleaned = content.replace("```json", "").replace("```", "");
+      const feedbackJson = JSON.parse(cleaned);
+
+      const { error } = await supabase.from("interview-feedback").insert([
+        {
+          userName: interviewInfo?.userName,
+          userEmail: interviewInfo?.userEmail,
+          interview_id: interview_id,
+          feedback: feedbackJson,
+          recommended: false,
+        },
+      ]);
+
+      if (error) {
+        console.error("Supabase error:", error.message);
+        toast.error("Failed to store feedback.");
+        return;
+      }
+
+      toast.success("Feedback saved!");
+      router.replace(`/interview/${interview_id}/completed`);
+    } catch (error) {
+      console.error("Feedback error:", error);
+      toast.error("Something went wrong while generating feedback.");
+    } finally {
+      setLoading(false);
+    }
+  }, [interviewInfo?.userName, interviewInfo?.userEmail, interview_id, router]);
 
   useEffect(() => {
     if (!vapiRef.current) {
@@ -107,12 +149,13 @@ Keep it friendly, short, and React-focused.
         }
       });
     }
+
     console.log("this is conversation ---->>>", conversation);
 
     if (interviewInfo) {
       startCall();
     }
-  }, [interviewInfo]);
+  }, [interviewInfo, conversation, generateFeedback, startCall]);
 
   const stopInterview = () => {
     vapiRef.current?.stop();
@@ -121,48 +164,6 @@ Keep it friendly, short, and React-focused.
   console.log(" this is conversation", conversationRef.current);
 
   const [loading, setLoading] = useState<boolean>(false);
-  const generateFeedback = async () => {
-    if (!conversationRef.current) {
-      console.warn("No conversation available.");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const result = await axios.post("/api/ai-feedback", {
-        conversation: conversationRef.current,
-      });
-
-      const content = result.data.content;
-      const cleaned = content.replace("```json", "").replace("```", "");
-      const feedbackJson = JSON.parse(cleaned);
-
-      const { data, error } = await supabase.from("interview-feedback").insert([
-        {
-          userName: interviewInfo?.userName,
-          userEmail: interviewInfo?.userEmail,
-          interview_id: interview_id,
-          feedback: feedbackJson,
-          recommended: false,
-        },
-      ]);
-
-      if (error) {
-        console.error("Supabase error:", error.message);
-        toast.error("Failed to store feedback.");
-        return;
-      }
-
-      toast.success("Feedback saved!");
-      router.replace(`/interview/${interview_id}/completed`);
-      setLoading(false);
-    } catch (error) {
-      console.error("Feedback error:", error);
-      toast.error("Something went wrong while generating feedback.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="p-20 lg:px-48 xl:px-56">

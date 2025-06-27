@@ -8,12 +8,12 @@ function Provider({ children }: { children: any }) {
   const [user, setUser] = useState<UserDetail | null>(null);
   const CreateNewUser = () => {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
-      let { data: Users, error } = await supabase
+      const { data: Users } = await supabase
         .from("users")
         .select("*")
         .eq("email", user?.email);
       if (Users?.length === 0) {
-        const { data, error } = await supabase.from("users").insert([
+        const { data } = await supabase.from("users").insert([
           {
             name: user?.user_metadata?.name,
             email: user?.user_metadata?.email,

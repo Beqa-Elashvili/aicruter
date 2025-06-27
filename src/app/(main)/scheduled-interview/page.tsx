@@ -4,7 +4,7 @@ import { useUser } from "@/app/providers/provider";
 import { supabase } from "@/app/services/suparbaseClient";
 import { Button } from "@/components/ui/button";
 import { Video } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import InterviewCard from "../dashboard/_components/InterviewCard";
 import { Tinterview } from "@/app/types/types";
 
@@ -12,18 +12,21 @@ function ScheduledInterview() {
   const { user } = useUser();
   const [interviewList, setInterviewList] = useState<any>([]);
 
-  useEffect(() => {
-    user && getInterviewList();
-  }, [user]);
-
-  const getInterviewList = async () => {
+  const getInterviewList = useCallback(async () => {
     const result = await supabase
       .from("Interviews")
       .select("jobPosition,duration,interview_id,interview_feedback(userEmail)")
       .eq("userEmail", user?.email)
       .order("id", { ascending: false });
-    result && setInterviewList(result.data);
-  };
+
+    if (result?.data) {
+      setInterviewList(result.data);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) getInterviewList();
+  }, [user, getInterviewList]);
 
   return (
     <div className="mt-5">
@@ -33,7 +36,7 @@ function ScheduledInterview() {
       {interviewList?.length === 0 ? (
         <div className="p-5 flex flex-col gap-3 items-center mt-5 rounded-lg bg-white">
           <Video className="h-10 w-10 text-blue-500" />
-          <h2>You don't have interview created!</h2>
+          <h2>You don&apos;t have interview created!</h2>
           <Button className="bg-blue-600">+ Create New Interview</Button>
         </div>
       ) : (

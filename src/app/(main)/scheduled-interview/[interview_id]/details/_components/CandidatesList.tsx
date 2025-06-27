@@ -1,7 +1,6 @@
 import { InterviewFeedback } from "@/app/types/types";
 import React from "react";
 import moment from "moment";
-import { Button } from "@/components/ui/button";
 import CandidateFeedbackDialog from "./CandidateFeedbackDialog";
 
 function CandidatesList({

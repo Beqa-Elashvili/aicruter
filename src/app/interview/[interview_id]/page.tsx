@@ -5,10 +5,11 @@ import { supabase } from "@/app/services/suparbaseClient";
 import Logo from "@/components/logo/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PostgrestError } from "@supabase/supabase-js";
 import { Clock, Info, Loader2Icon, Video } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 
 interface InterviewType {
@@ -24,31 +25,38 @@ function Interview() {
   const [loading, setLoading] = useState<boolean>(false);
   const [userEmail, setUserEmail] = useState("");
   const { interview_id } = useParams();
-  const { interviewInfo, setInterviewInfo } = useInterviewData();
+  const { setInterviewInfo } = useInterviewData();
   const router = useRouter();
 
-  useEffect(() => {
-    interview_id && GetInterviewDetails();
-  }, [interview_id]);
-
-  const GetInterviewDetails = async () => {
+  const GetInterviewDetails = useCallback(async () => {
     try {
       setLoading(true);
-      let { data: Interviews, error } = await supabase
+      const { data: Interviews, error } = await supabase
         .from("Interviews")
         .select("jobPosition, jobDescription, duration, type")
         .eq("interview_id", interview_id);
       if (Interviews) setInterviewData(Interviews[0]);
-    } catch (error) {
-      toast("Incorrect Interview Link");
+      if (error) {
+        console.error(error);
+        toast.error("Failed to fetch interview details.");
+      }
+    } catch (error: unknown) {
+      toast.error("Incorrect Interview Link");
     } finally {
       setLoading(false);
     }
-  };
+  }, [interview_id]);
+
+  useEffect(() => {
+    if (interview_id) {
+      GetInterviewDetails();
+    }
+  }, [interview_id, GetInterviewDetails]);
+
   const onJoinInterview = async () => {
     try {
       setLoading(true);
-      let { data: Interviews, error } = await supabase
+      const { data: Interviews } = await supabase
         .from("Interviews")
         .select("*")
         .eq("interview_id", interview_id);

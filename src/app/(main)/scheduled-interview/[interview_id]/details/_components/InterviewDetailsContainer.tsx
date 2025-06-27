@@ -1,5 +1,5 @@
 import { TinterviewDetails } from "@/app/types/types";
-import { Calendar, Clock, MessageCircleQuestionIcon } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 import React from "react";
 import moment from "moment";
 

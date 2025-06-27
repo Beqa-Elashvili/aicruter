@@ -3,15 +3,10 @@ import { useUser } from "@/app/providers/provider";
 import React from "react";
 import Image from "next/image";
 import { RxAvatar } from "react-icons/rx";
-import { usePathname } from "next/navigation";
 
 function WelcomeContainer() {
-  const pathname = usePathname();
   const { user } = useUser();
-  // if (!user && pathname !== "/auth") {
-  //   window.location.replace("/auth");
-  //   return;
-  // }
+
   return (
     <div className="bg-white p-5 rounded-xl flex items-center justify-between">
       <div>
