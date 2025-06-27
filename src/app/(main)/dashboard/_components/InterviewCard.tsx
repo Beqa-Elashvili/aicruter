@@ -14,7 +14,7 @@ function InterviewCard({
   viewDetail?: boolean;
 }) {
   const copyLink = () => {
-    const url = `${process.env.NEXT_PUBLIC_HOST_URL} / ${interview?.interview_id}`;
+    const url = `${process.env.NEXT_PUBLIC_HOST_URL}/${interview?.interview_id}`;
     navigator.clipboard.writeText(url);
     toast("Copied!");
   };
