@@ -19,8 +19,6 @@ function InterviewCard({
     toast("Copied!");
   };
 
-  console.log(interview);
-
   const onSend = () => {
     toast("send on email will add soon!");
   };

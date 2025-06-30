@@ -40,8 +40,6 @@ function CreateInterview() {
     setStep(step + 1);
   };
 
-  console.log(formData);
-
   const onCreateLink = (interview_id: string) => {
     setInterviewId(interview_id);
     setStep(step + 1);

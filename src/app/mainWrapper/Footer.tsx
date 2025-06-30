@@ -8,7 +8,7 @@ import { toast } from "sonner";
 function Footer() {
   const copyEmail = () => {
     navigator.clipboard.writeText("beqaelashvili3@gmail.com");
-    toast("/copied!");
+    toast("copied!");
   };
   return (
     <div className="p-3  fixed bottom-0 bg-secondary w-full border-t gap-1  flex flex-col items-center text-center md:flex-row md:justify-between md:text-lef">
@@ -22,7 +22,7 @@ function Footer() {
         </Link>
         <Link
           className="flex items-center gap-1"
-          href={"https://www.linkedin.com/in/beqa-elashvili-493284234/"}
+          href={"https://github.com/Beqa-Elashvili/aicruter"}
         >
           <RxGithubLogo className="text-gray-500" /> GitHub
         </Link>
@@ -32,7 +32,7 @@ function Footer() {
       </div>
       <h2
         onClick={copyEmail}
-        className="text-gray-500 text-sm flex items-center gap-1"
+        className="text-gray-500 hover:underline cursor-pointer text-sm flex items-center gap-1"
       >
         @ beqaelashvili3@gmail.com. <span>let&apos;s Connect.</span>
       </h2>

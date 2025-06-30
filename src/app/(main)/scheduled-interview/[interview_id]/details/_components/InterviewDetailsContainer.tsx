@@ -8,7 +8,6 @@ function InterviewDetailsContainer({
 }: {
   interviewDetails: TinterviewDetails | null;
 }) {
-  console.log(interviewDetails);
   return (
     <div className="p-5 bg-white rounded-lg mt-5">
       <h2>{interviewDetails?.jobDescription}</h2>

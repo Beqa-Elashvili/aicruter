@@ -85,7 +85,7 @@ Keep it friendly, short, and React-focused.
       const cleaned = content.replace("```json", "").replace("```", "");
       const feedbackJson = JSON.parse(cleaned);
 
-      const { error } = await supabase.from("interview-feedback").insert([
+      const { error } = await supabase.from("interview_feedback").insert([
         {
           userName: interviewInfo?.userName,
           userEmail: interviewInfo?.userEmail,
@@ -137,20 +137,12 @@ Keep it friendly, short, and React-focused.
       });
 
       vapiRef.current.on("message", (message) => {
-        console.log("Message received:", message);
-
         if (message?.conversation) {
           conversationRef.current = message.conversation;
           setConversation(message.conversation);
-        } else {
-          console.warn(
-            "No conversation in message — keeping previous conversation."
-          );
         }
       });
     }
-
-    console.log("this is conversation ---->>>", conversation);
 
     if (interviewInfo) {
       startCall();
@@ -160,8 +152,6 @@ Keep it friendly, short, and React-focused.
   const stopInterview = () => {
     vapiRef.current?.stop();
   };
-
-  console.log(" this is conversation", conversationRef.current);
 
   const [loading, setLoading] = useState<boolean>(false);
 

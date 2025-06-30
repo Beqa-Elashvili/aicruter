@@ -24,7 +24,7 @@ function InterviewComplete() {
           <div className="bg-blue-500 rounded-full p-4">
             <Send className="h-6 text-white w-6" />
           </div>
-          <h2 className="text-xl font-bold">What&apos;s Next?</h2>
+          <h2 className="text-xl font-bold">What&apos;s Next ?</h2>
           <p className="text-sm text-gray-500">
             The recruiter review your interview responses and will contact you
             soon regarding the next steps.

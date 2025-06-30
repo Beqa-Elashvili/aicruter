@@ -32,8 +32,6 @@ function QuestionList({
         ...formData,
       });
 
-      console.log("API Response:", result.data);
-
       if (result.data?.interviewQuestions) {
         setQuestionList(result.data.interviewQuestions);
       } else {

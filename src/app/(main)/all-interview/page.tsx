@@ -30,7 +30,6 @@ export default function AllInterview() {
     }
   }, [user, GetInterviewsList]);
 
-  console.log(interviewList);
 
   return (
     <div className="my-5">

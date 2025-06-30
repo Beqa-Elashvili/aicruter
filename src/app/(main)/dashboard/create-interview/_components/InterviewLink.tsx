@@ -59,10 +59,6 @@ function InterviewLink({
             <List className="w-4 h-4 text-sm" />
             10 Questions
           </h2>
-          {/* <h2>
-            <Calendar className="w-4 h-4 text-sm text-gray-500" />
-            {formData?.duration}
-          </h2> */}
         </div>
       </div>
       <div className="mt-7 bg-white p-5 rounded-lg w-full ">
