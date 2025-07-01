@@ -18,10 +18,11 @@ function QuestionList({
   onCreateLink,
 }: {
   formData: TFormData;
-  onCreateLink: (interview_id: string) => void;
+  onCreateLink: (interview_id?: string) => void;
 }) {
   const [questionsList, setQuestionList] = useState([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
   const [load, setLoad] = useState<boolean>(false);
   const { user } = useUser();
 
@@ -37,8 +38,8 @@ function QuestionList({
       } else {
         throw new Error("Invalid response format");
       }
-    } catch (error: unknown) {
-      console.error("Error:", error);
+    } catch (error: any) {
+      setError(error.response.data.error);
       toast("Server Error. Please try again.");
     } finally {
       setLoading(false);
@@ -55,7 +56,7 @@ function QuestionList({
     try {
       setLoad(true);
       const interview_id = uuidv4();
-      const {} = await supabase
+      await supabase
         .from("Interviews")
         .insert([
           {
@@ -90,21 +91,43 @@ function QuestionList({
         </div>
       )}
 
-      {questionsList.length > 0 && (
+      {questionsList.length > 0 && !loading ? (
         <div>
           <QuestionListContainer questionsList={questionsList} />
+          <div className="flex justify-end mt-10">
+            <Button
+              disabled={load}
+              className="bg-blue-600"
+              onClick={() => onFinish()}
+            >
+              {load && <Loader2 className="animate-spin" />}
+              Create Interview Link & Finish
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div>
+          {!loading && questionsList.length === 0 && (
+            <>
+              <h1 className="flex flex-col gap-1">
+                rate limit exceeded: Please try-again later:
+                <span className="text-red-500 text-sm text-balance">
+                  {error}
+                </span>
+              </h1>
+              <div className="flex justify-end mt-10">
+                <Button
+                  disabled={load}
+                  className="bg-blue-600"
+                  onClick={() => onCreateLink()}
+                >
+                  return
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       )}
-      <div className="flex justify-end mt-10">
-        <Button
-          disabled={load}
-          className="bg-blue-600"
-          onClick={() => onFinish()}
-        >
-          {load && <Loader2 className="animate-spin" />}
-          Create Interview Link & Finish
-        </Button>
-      </div>
     </div>
   );
 }

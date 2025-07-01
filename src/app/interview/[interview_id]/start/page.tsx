@@ -119,7 +119,7 @@ Keep it friendly, short, and React-focused.
       vapiRef.current.on("call-start", () => {
         console.log("Call started");
         setIsRunning(true);
-        toast("Call Connected...");
+        toast("Call Connected... Please turn on microphone and voice!");
       });
 
       vapiRef.current.on("speech-start", () => {

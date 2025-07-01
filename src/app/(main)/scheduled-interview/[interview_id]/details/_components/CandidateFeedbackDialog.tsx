@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { toast } from "sonner";
 
 function CandidateFeedbackDialog({
   candidate,
@@ -19,7 +20,7 @@ function CandidateFeedbackDialog({
   const feedback = candidate.feedback.feedback;
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button variant={"outline"} className="text-blue-500">
           View Report
         </Button>
@@ -51,7 +52,7 @@ function CandidateFeedbackDialog({
                   <div>
                     <h2 className="flex justify-between">
                       Technical Skills{" "}
-                      <span>{feedback.rating.technicalSkills}/10</span>
+                      <span>{feedback.rating.technicalSkills || 0}/10</span>
                     </h2>
                     <Progress
                       value={feedback.rating.technicalSkills * 10}
@@ -61,7 +62,7 @@ function CandidateFeedbackDialog({
                   <div>
                     <h2 className="flex justify-between ">
                       Communication
-                      <span>{feedback.rating.communication}/10</span>
+                      <span>{feedback.rating.communication || 0}/10</span>
                     </h2>
                     <Progress
                       value={feedback.rating.communication * 10}
@@ -71,7 +72,7 @@ function CandidateFeedbackDialog({
                   <div>
                     <h2 className="flex justify-between">
                       Problem Solving{" "}
-                      <span>{feedback.rating.problemSolving}/10</span>
+                      <span>{feedback.rating.problemSolving || 0}/10</span>
                     </h2>
                     <Progress
                       value={feedback.rating.problemSolving * 10}
@@ -80,7 +81,8 @@ function CandidateFeedbackDialog({
                   </div>
                   <div>
                     <h2 className="flex justify-between">
-                      Experience <span>{feedback.rating.experince}/10</span>
+                      Experience{" "}
+                      <span>{feedback.rating.experince || 0}/10</span>
                     </h2>
                     <Progress
                       value={feedback.rating.experince * 10}
@@ -123,6 +125,7 @@ function CandidateFeedbackDialog({
                   </p>
                 </div>
                 <Button
+                  onClick={() => toast("comming soon!")}
                   className={` mt-2 md:mt-0 w-full md:max-w-40 ${
                     feedback.Recommendation === "No"
                       ? "bg-red-700"

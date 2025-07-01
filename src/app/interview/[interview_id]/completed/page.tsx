@@ -1,8 +1,13 @@
+"use client";
+
 import React from "react";
 import { Check, Send } from "lucide-react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 function InterviewComplete() {
+  const router = useRouter();
   return (
     <div className="flex justify-center p-8  md:p-20 ">
       <div className="flex flex-col text-center items-center gap-4">
@@ -29,6 +34,12 @@ function InterviewComplete() {
             The recruiter review your interview responses and will contact you
             soon regarding the next steps.
           </p>
+          <Button
+            className="mt-4"
+            onClick={() => router.push("/scheduled-interview")}
+          >
+            view feedback
+          </Button>
         </div>
       </div>
     </div>

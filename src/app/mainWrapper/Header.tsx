@@ -1,31 +1,35 @@
+"use client";
+
 import Logo from "@/components/logo/logo";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { User2Icon } from "lucide-react";
 import { useUser } from "../providers/provider";
+import { useRouter } from "next/navigation";
 
 function Header() {
   const { user } = useUser();
+  const router = useRouter();
 
   const isUser = () => {
     if (user) {
-      window.location.replace("/all-interview");
+      router.push("/all-interview");
     } else {
-      window.location.replace("/auth");
+      router.push("/auth");
     }
   };
   return (
     <div className="bg-white p-3 md:px-20 flex items-center justify-between">
       <Logo />
       <div className="items-center hidden md:flex font-semibold  gap-12">
-        <Link href={"/features"} className="hover:underline">
+        <Link href="#features" className="hover:underline">
           Features
         </Link>
-        <Link href={"/features"} className="hover:underline">
+        <Link href="#how-it-works" className="hover:underline">
           How It Works
         </Link>
-        <Link href={"/features"} className="hover:underline">
+        <Link href="#explore" className="hover:underline">
           explore
         </Link>
       </div>
@@ -44,7 +48,7 @@ function Header() {
         </Button>
         <Button
           onClick={() => {
-            window.location.replace("/dashboard");
+            router.push("/dashboard");
           }}
         >
           Dashboard

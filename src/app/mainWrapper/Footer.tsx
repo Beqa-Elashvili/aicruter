@@ -15,18 +15,21 @@ function Footer() {
       <Logo />
       <div className="flex items-center  justify-between w-full  md:w-1/5 px-4 md:px-0  gap-12 font-semibold">
         <Link
-          className="flex items-center gap-1"
+          className="flex items-center gap-1 hover:underline"
           href={"https://www.linkedin.com/in/beqa-elashvili-493284234/"}
         >
           <RxLinkedinLogo className="text-blue-600" /> LinkedIn
         </Link>
         <Link
-          className="flex items-center gap-1"
+          className="flex items-center gap-1 hover:underline"
           href={"https://github.com/Beqa-Elashvili/aicruter"}
         >
           <RxGithubLogo className="text-gray-500" /> GitHub
         </Link>
-        <Link className="flex items-center gap-1" href={"https://vapi.ai/"}>
+        <Link
+          className="flex items-center gap-1 hover:underline"
+          href={"https://vapi.ai/"}
+        >
           <Bot className="text-gray-600" /> Vapi.ai
         </Link>
       </div>

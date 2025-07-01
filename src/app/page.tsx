@@ -26,7 +26,10 @@ export default function Home() {
             </div>
           </div>
           <div className="flex flex-col items-center  mt-20 md:mt-40 w-full gap-4">
-            <div className="flex flex-col  items-center justify-center w-full">
+            <section
+              id="features"
+              className="flex flex-col  items-center justify-center w-full"
+            >
               <h1 className="font-bold text-3xl  md:text-5xl">
                 Streamline Your Hiring Process
               </h1>
@@ -34,7 +37,7 @@ export default function Home() {
                 AiCruiter helps you save time and find better candidates with
                 our advanced AI interview technology.
               </p>
-            </div>
+            </section>
             <div className=" space-y-12 md:space-y-0 md:flex items-center justify-between gap-12 ">
               <div className="border shadow rounded-lg flex flex-col items-center justify-center gap-2 p-4 ">
                 <Clock className="h-20 w-20 text-blue-500" />
@@ -63,7 +66,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col bg-white items-center py-20 px-4 md:px-20 mt-20 md:mt-40 w-full gap-4">
+        <section
+          id="how-it-works"
+          className="flex flex-col bg-white items-center py-20 px-4 md:px-20 mt-20 md:mt-40 w-full gap-4"
+        >
           <div className="flex flex-col  items-center justify-center w-full">
             <h1 className="font-bold text-3xl  md:text-5xl">
               Streamline Your Hiring Process
@@ -103,8 +109,8 @@ export default function Home() {
               </p>
             </div>
           </div>
-        </div>
-        <div className="py-20 px-4 md:px-20 w-full gap-4">
+        </section>
+        <section id="explore" className="py-20 px-4 md:px-20 w-full gap-4">
           <div className="flex flex-col  items-center justify-center w-full">
             <h1 className="font-bold text-3xl  md:text-5xl">
               Ready to Transform Your Hiring Process?
@@ -122,7 +128,7 @@ export default function Home() {
               Get Started
             </Link>
           </div>
-        </div>
+        </section>
       </MainWrapper>
     </div>
   );

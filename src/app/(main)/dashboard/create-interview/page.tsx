@@ -40,9 +40,13 @@ function CreateInterview() {
     setStep(step + 1);
   };
 
-  const onCreateLink = (interview_id: string) => {
-    setInterviewId(interview_id);
-    setStep(step + 1);
+  const onCreateLink = (interview_id?: string) => {
+    if (interview_id) {
+      setInterviewId(interview_id);
+      setStep(step + 1);
+    } else {
+      setStep(step - 1);
+    }
   };
 
   return (
@@ -60,7 +64,7 @@ function CreateInterview() {
       ) : step === 2 ? (
         <QuestionList
           formData={formData}
-          onCreateLink={(interview_id: string) => onCreateLink(interview_id)}
+          onCreateLink={(interview_id?: string) => onCreateLink(interview_id)}
         />
       ) : step === 3 ? (
         <InterviewLink formData={formData} interview_id={interviewId} />
