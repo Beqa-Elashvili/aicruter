@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useInterviewData } from "@/app/providers/InterviewProvider";
-import { Timer, Bot, Mic, Phone, Loader2Icon } from "lucide-react";
+import { Timer as TimeIcon, Bot, Mic, Phone, Loader2Icon } from "lucide-react";
 import Vapi from "@vapi-ai/web";
 import type { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
 import AlertComfirmation from "./_components/AlertComfirmation";
@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { supabase } from "@/app/services/suparbaseClient";
 import { useParams, useRouter } from "next/navigation";
+import Timer from "./_components/Timer";
 
 function StratInterview() {
   const { interviewInfo } = useInterviewData();
@@ -117,6 +118,7 @@ Keep it friendly, short, and React-focused.
 
       vapiRef.current.on("call-start", () => {
         console.log("Call started");
+        setIsRunning(true);
         toast("Call Connected...");
       });
 
@@ -133,6 +135,7 @@ Keep it friendly, short, and React-focused.
       vapiRef.current.on("call-end", () => {
         console.log("Call ended");
         toast("Interview Ended!");
+        setIsRunning(false);
         generateFeedback();
       });
 
@@ -154,14 +157,15 @@ Keep it friendly, short, and React-focused.
   };
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
 
   return (
-    <div className="p-20 lg:px-48 xl:px-56">
+    <div className="p-4 lg:px-48 xl:px-56">
       <h2 className="font-bold text-xl flex justify-between">
         AI Interview Session
-        <span className="flex gap-2 items-center ">
-          <Timer />
-          00:00:00
+        <span className="flex items-center gap-2">
+          <TimeIcon />
+          <Timer isRunning={isRunning} />
         </span>
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
