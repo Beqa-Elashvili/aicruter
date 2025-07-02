@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Logo from "@/components/logo/logo";
 import { Button } from "@/components/ui/button";
@@ -21,12 +22,13 @@ import { useRouter } from "next/navigation";
 export function AppSidebar() {
   const path = usePathname();
   const router = useRouter();
+  const { setOpen, setOpenMobile } = useSidebar();
   return (
     <Sidebar>
       <SidebarHeader>
         <Logo classname="flex justify-center" />
         <Button
-          onClick={() => router.push("/create-interview")}
+          onClick={() => router.push("/dashboard/create-interview")}
           className="bg-blue-600"
         >
           <Plus className="w-full" />
@@ -38,7 +40,13 @@ export function AppSidebar() {
           <SidebarContent>
             <SidebarMenu>
               {SideBarOptions.map((option, index) => (
-                <SidebarMenuItem key={index} className="p-1">
+                <SidebarMenuItem
+                  onClick={() => {
+                    setOpen(false), setOpenMobile(false);
+                  }}
+                  key={index}
+                  className="p-1"
+                >
                   <SidebarMenuButton
                     asChild
                     className={`p-5 ${
