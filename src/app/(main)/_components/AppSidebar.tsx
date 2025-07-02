@@ -23,6 +23,7 @@ export function AppSidebar() {
   const path = usePathname();
   const router = useRouter();
   const { setOpen, setOpenMobile } = useSidebar();
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -42,7 +43,8 @@ export function AppSidebar() {
               {SideBarOptions.map((option, index) => (
                 <SidebarMenuItem
                   onClick={() => {
-                    setOpen(false), setOpenMobile(false);
+                    setOpen(false);
+                    setOpenMobile(false);
                   }}
                   key={index}
                   className="p-1"
