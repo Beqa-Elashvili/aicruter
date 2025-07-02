@@ -1,6 +1,7 @@
 "use client";
 
 import { useInterviewData } from "@/app/providers/InterviewProvider";
+import { useUser } from "@/app/providers/provider";
 import { supabase } from "@/app/services/suparbaseClient";
 import Logo from "@/components/logo/logo";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ interface InterviewType {
 function Interview() {
   const [interviewData, setInterviewData] = useState<InterviewType>();
   const [userName, setUserName] = useState("");
+  const { user } = useUser();
   const [loading, setLoading] = useState<boolean>(false);
   const [userEmail, setUserEmail] = useState("");
   const { interview_id } = useParams();
@@ -54,6 +56,10 @@ function Interview() {
   }, [interview_id, GetInterviewDetails]);
 
   const onJoinInterview = async () => {
+    if (!user) {
+      router.push("/auth");
+      return;
+    }
     try {
       setLoading(true);
       const { data: Interviews } = await supabase
@@ -131,7 +137,7 @@ function Interview() {
         >
           <Video />
           {loading && <Loader2Icon className="animate-spin" />}
-          Join Interview
+          {user ? "Join Interview" : "Please Sign in first"}
         </Button>
       </div>
     </div>

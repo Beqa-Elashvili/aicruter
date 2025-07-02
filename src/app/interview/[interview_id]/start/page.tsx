@@ -106,7 +106,7 @@ Keep it friendly, short, and React-focused.
       router.replace(`/interview/${interview_id}/completed`);
     } catch (error) {
       console.error("Feedback error:", error);
-      toast.error("Something went wrong while generating feedback.");
+      toast.error("Hit Rate Limit! Please try later.");
     } finally {
       setLoading(false);
     }

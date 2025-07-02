@@ -16,14 +16,19 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { SideBarOptions } from "@/app/services/Constants";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export function AppSidebar() {
   const path = usePathname();
+  const router = useRouter();
   return (
     <Sidebar>
       <SidebarHeader>
         <Logo classname="flex justify-center" />
-        <Button className="bg-blue-600">
+        <Button
+          onClick={() => router.push("/create-interview")}
+          className="bg-blue-600"
+        >
           <Plus className="w-full" />
           Create New Interview
         </Button>

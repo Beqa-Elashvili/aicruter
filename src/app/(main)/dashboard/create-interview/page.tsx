@@ -8,10 +8,12 @@ import FormContainer from "./_components/FormContainer";
 import QuestionList from "./_components/QuestionList";
 import { toast } from "sonner";
 import InterviewLink from "./_components/InterviewLink";
+import { useUser } from "@/app/providers/provider";
 
 function CreateInterview() {
   const router = useRouter();
   const [step, setStep] = useState<number>(1);
+  const { user } = useUser();
   const [interviewId, setInterviewId] = useState("");
   const [formData, setFormData] = useState<{
     [key: string]: string | string[];
@@ -35,6 +37,10 @@ function CreateInterview() {
       !formData.type
     ) {
       toast.warning("Please enter all details");
+      return;
+    }
+    if (!user) {
+      router.push("/auth");
       return;
     }
     setStep(step + 1);

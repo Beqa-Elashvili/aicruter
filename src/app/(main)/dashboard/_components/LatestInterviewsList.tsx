@@ -7,9 +7,12 @@ import { Video } from "lucide-react";
 import React, { useEffect, useState, useCallback } from "react";
 import InterviewCard from "./InterviewCard";
 import { Tinterview } from "@/app/types/types";
+import { useRouter } from "next/navigation";
+
 function LatestInterviewsList() {
   const [interviewList, setInterviewList] = useState<Tinterview[]>([]);
   const { user } = useUser();
+  const router = useRouter();
 
   const GetInterviewsList = useCallback(async () => {
     const { data: Interviews } = await supabase
@@ -36,7 +39,12 @@ function LatestInterviewsList() {
         <div className="p-5 flex flex-col gap-3 items-center mt-5 rounded-lg bg-white">
           <Video className="h-10 w-10 text-blue-500" />
           <h2>You don&apos;t have interview created!</h2>
-          <Button className="bg-blue-600">+ Create New Interview</Button>
+          <Button
+            onClick={() => router.push("/dashboard/create-interview")}
+            className="bg-blue-600"
+          >
+            + Create New Interview
+          </Button>
         </div>
       ) : (
         <div className="grid  mt-5 gird-cols-2 md:grid-cols-3  gap-5">

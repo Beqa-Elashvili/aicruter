@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button";
 import MainWrapper from "./mainWrapper/MainWrapper";
-import { ArrowRight, Clock, ChartBar } from "lucide-react";
+import { Clock, ChartBar } from "lucide-react";
 import Link from "next/link";
+import ButtonComp from "./(main)/_components/Button";
 
 export default function Home() {
   return (
@@ -20,9 +20,7 @@ export default function Home() {
                 focus on finding the perfect match. Save time, reduce bias, and
                 improve your hiring process.
               </p>
-              <Button className="flex items-center gap-2 mt-4 px-4">
-                Create Interview <ArrowRight />
-              </Button>
+              <ButtonComp />
             </div>
           </div>
           <div className="flex flex-col items-center  mt-20 md:mt-40 w-full gap-4">
