@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     });
 
     const completion = await openai.chat.completions.create({
-      model: "google/gemini-2.0-flash-exp:free",
+      model: "openrouter/cypher-alpha:free",
       messages: [{ role: "user", content: FINAL_PROMPT }],
     });
     return NextResponse.json(completion.choices[0].message);
