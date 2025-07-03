@@ -22,7 +22,7 @@ export type FeedbackDetail = {
   Recommendation: "Yes" | "No";
   RecommendationMsg: string;
   rating: FeedbackRatings;
-  summery: string;
+  summary: string;
 };
 
 export type InterviewFeedback = {

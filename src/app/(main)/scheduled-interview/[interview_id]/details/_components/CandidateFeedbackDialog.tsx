@@ -94,7 +94,7 @@ function CandidateFeedbackDialog({
               <div className="mt-5">
                 <h2 className="font-bold">Performace Summery</h2>
                 <p className="p-5 bg-secondary my-3 rounded-md">
-                  {feedback.summery}
+                  {feedback.summary}
                 </p>
               </div>
               <div

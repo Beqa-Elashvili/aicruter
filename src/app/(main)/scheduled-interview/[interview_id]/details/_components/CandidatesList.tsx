@@ -9,7 +9,7 @@ function CandidatesList({
   candidateList: InterviewFeedback[];
 }) {
   return (
-    <div className="">
+    <div className="space-y-4">
       <h2 className="font-bold my-5">Candidates {candidateList.length}</h2>
       {candidateList.map((candidate: InterviewFeedback, index) => (
         <div

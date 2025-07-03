@@ -60,6 +60,11 @@ function Interview() {
       router.push("/auth");
       return;
     }
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regex.test(userEmail)) {
+      toast("გთხოვთ შეიყვანოთ ვალიდური მეილი!");
+      return;
+    }
     try {
       setLoading(true);
       const { data: Interviews } = await supabase
@@ -131,7 +136,7 @@ function Interview() {
           </div>
         </div>
         <Button
-          disabled={loading || !userName}
+          disabled={loading || !userName || !userEmail}
           onClick={() => onJoinInterview()}
           className={`mt-5 w-full font-bold bg-blue-600`}
         >
