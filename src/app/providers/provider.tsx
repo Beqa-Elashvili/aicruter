@@ -6,14 +6,16 @@ import { UserDetail, UserDetailContext } from "./UserDetailContext";
 
 function Provider({ children }: { children: any }) {
   const [user, setUser] = useState<UserDetail | null>(null);
+
   const CreateNewUser = () => {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       const { data: Users } = await supabase
-        .from("users")
+        .from("Users")
         .select("*")
         .eq("email", user?.email);
+
       if (Users?.length === 0) {
-        const { data } = await supabase.from("users").insert([
+        const { data } = await supabase.from("Users").insert([
           {
             name: user?.user_metadata?.name,
             email: user?.user_metadata?.email,

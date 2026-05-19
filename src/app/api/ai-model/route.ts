@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     });
 
     const completion = await openai.chat.completions.create({
-      model: "openrouter/cypher-alpha:free",
+      model: "baidu/cobuddy:free",
       messages: [{ role: "user", content: FINAL_PROMPT }],
     });
 
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     console.error("AI error:", error);
     return NextResponse.json(
       { error: error.message || "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

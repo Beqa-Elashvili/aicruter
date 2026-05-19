@@ -21,7 +21,14 @@ function StratInterview() {
   const router = useRouter();
   const { interview_id } = useParams();
 
-  const startCall = useCallback(() => {
+  const startCall = useCallback(async () => {
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (err) {
+      toast.error("Microphone permission required");
+      return;
+    }
+
     const questionList = interviewInfo?.interviewData.questionList
       .map((item: any) => item?.question)
       .filter(Boolean)
@@ -36,12 +43,12 @@ function StratInterview() {
         language: "en-US",
       },
       voice: {
-        provider: "playht",
-        voiceId: "jennifer",
+        provider: "openai",
+        voiceId: "alloy",
       },
       model: {
         provider: "openai",
-        model: "gpt-4",
+        model: "gpt-4o-mini",
         messages: [
           {
             role: "system",
@@ -113,6 +120,9 @@ Keep it friendly, short, and React-focused.
   }, [interviewInfo?.userName, interviewInfo?.userEmail, interview_id, router]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (vapiRef.current) return;
+
     if (!vapiRef.current) {
       vapiRef.current = new Vapi(process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY!);
 
